@@ -19,33 +19,33 @@ let modifyFile3 = (val) => {
 
 // TODO: Kerjakan bacaData
 // gunakan variabel file1, file2, dan file3
-const bacaData = (err, data) => {
+const bacaData = (fnCallBack) => {
   let jsonAll = [];
   let jsonTest = "";
 
-  fs.readFile(file1, "utf8", (err, data1) => {
+  fs.readFile(file1, "utf8", (err, data) => {
     if (err) {
-      return err;
+      return fnCallBack(err, null);
     }
-    fs.readFile(file2, "utf8", (err, data2) => {
-      if (err) {
-        return err;
-      }
-      fs.readFile(file3, "utf8", (err, data3) => {
-        if (err) {
-          return err;
-        }
-        jsonTest = JSON.parse(data1);
-        jsonAll.push(jsonTest.message.split(" ")[1]);
-        jsonTest = JSON.parse(data2);
-        jsonAll.push(jsonTest[0].message.split(" ")[1]);
-        jsonTest = JSON.parse(data3);
-        jsonAll.push(jsonTest[0].data.message.split(" ")[1]);
-      });
-    });
+    jsonTest = JSON.parse(data);
+    jsonAll.push(jsonTest.message.split(" ")[1]);
   });
-  console.log(data);
-  return null, data;
+
+  fs.readFile(file2, "utf8", (err, data) => {
+    if (err) {
+      return fnCallBack(err, null);
+    }
+    jsonTest = JSON.parse(data);
+    jsonAll.push(jsonTest[0].message.split(" ")[1]);
+  });
+  fs.readFile(file3, "utf8", (err, data) => {
+    if (err) {
+      return fnCallBack(err, null);
+    }
+    jsonTest = JSON.parse(data);
+    jsonAll.push(jsonTest[0].data.message.split(" ")[1]);
+    return fnCallBack(null, jsonAll);
+  });
 };
 
 // ! JANGAN DIMODIFIKASI
